@@ -2,25 +2,42 @@ doctype html
 html
   head
     meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(rel="stylesheet",type="text/css",href="bootstrap3.min.css")
     link(rel="stylesheet",type="text/css",href="index.css")
     script(type="text/javascript",src="jquery-1.10.2.min.js")
     script(type="text/javascript",src="bootstrap3.min.js")
     script(type="text/javascript",src="index.js")
   body
-    #timer ????
-    a#min60.btn.btn-info.fbtn(onclick="adjust(-60)") -60
-    a#min10.btn.btn-info.fbtn(onclick="adjust(-10)") -10
-    a#toggle.btn.btn-primary(onclick="toggle()") RUN
-    a#reset.btn.btn-warning(onclick="reset()") RESET
-    a#hide.btn.btn-default(onclick="show()") &#xd60;
-    a#add10.btn.btn-info.fbtn(onclick="adjust(10)") +10
-    a#add60.btn.btn-info.fbtn(onclick="adjust(60)") +60
-    a#def10.btn.btn-success.fbtn(onclick="adjust(0,10)") 10 sec
-    a#def30.btn.btn-success.fbtn(onclick="adjust(0,30)") 30 sec
-    a#def60.btn.btn-success.fbtn(onclick="adjust(0,60)") 1 min
-    a#def180.btn.btn-success.fbtn(onclick="adjust(0,180)") 3 min
-    a#def300.btn.btn-success.fbtn(onclick="adjust(0,300)") 5 min
-    a#def600.btn.btn-success.fbtn(onclick="adjust(0,600)") 10 min
-    a#def900.btn.btn-success.fbtn(onclick="adjust(0,900)") 15 min
-    a#def1800.btn.btn-success.fbtn(onclick="adjust(0,1800)") 30 min
+    .app
+      h1 TABATA 計時器
+      p.lead 依照組數、準備時間與每組時間自動倒數，陪你完成訓練。
+      .controls
+        .form-group
+          label(for="cycles") 組數 (cycle)
+          input#cycles.form-control(type="number", min="1", value="8")
+          small.text-muted 使用滾輪快速調整組數
+        .form-group
+          label(for="prepare") 準備時間 (秒)
+          input#prepare.form-control(type="number", min="0", value="3")
+          small.text-muted 例如：3 秒後開始
+        .form-group
+          label 每組時間
+          .time-inputs
+            input#minutes.form-control(type="number", min="0", value="0")
+            span.unit 分
+            input#seconds.form-control(type="number", min="1", max="59", value="20")
+            span.unit 秒
+          small.text-muted 輸入分鐘與秒數，會以倒數方式提示
+      .status
+        .status-text
+          div.label-text 倒數狀態
+          div#phase 待命
+        .status-text.align-right
+          div.label-text 組別進度
+          div#cycle-progress 尚未開始
+      #timer 00:20
+      .actions
+        button#toggle.btn.btn-primary.btn-lg(onclick="toggle()") 開始
+        button#reset.btn.btn-default.btn-lg(onclick="resetTimer()") 重設
+      p#quote.hidden 所有的努力都不會白費，你正在往更優秀的自己邁進

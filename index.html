@@ -1,1 +1,56 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" type="text/css" href="bootstrap3.min.css"><link rel="stylesheet" type="text/css" href="index.css"><script type="text/javascript" src="jquery-1.10.2.min.js"></script><script type="text/javascript" src="bootstrap3.min.js"></script><script type="text/javascript" src="index.js"></script></head><body><div id="timer">????</div><a class="btn btn-info fbtn" id="min60" onclick="adjust(-60)">-60</a><a class="btn btn-info fbtn" id="min10" onclick="adjust(-10)">-10</a><a class="btn btn-primary" id="toggle" onclick="toggle()">RUN</a><a class="btn btn-warning" id="reset" onclick="reset()">RESET</a><a class="btn btn-default" id="hide" onclick="show()">&#xd60;</a><a class="btn btn-info fbtn" id="add10" onclick="adjust(10)">+10</a><a class="btn btn-info fbtn" id="add60" onclick="adjust(60)">+60</a><a class="btn btn-success fbtn" id="def10" onclick="adjust(0,10)">10 sec</a><a class="btn btn-success fbtn" id="def30" onclick="adjust(0,30)">30 sec</a><a class="btn btn-success fbtn" id="def60" onclick="adjust(0,60)">1 min</a><a class="btn btn-success fbtn" id="def180" onclick="adjust(0,180)">3 min</a><a class="btn btn-success fbtn" id="def300" onclick="adjust(0,300)">5 min</a><a class="btn btn-success fbtn" id="def600" onclick="adjust(0,600)">10 min</a><a class="btn btn-success fbtn" id="def900" onclick="adjust(0,900)">15 min</a><a class="btn btn-success fbtn" id="def1800" onclick="adjust(0,1800)">30 min</a></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="bootstrap3.min.css">
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="bootstrap3.min.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+</head>
+<body>
+  <div class="app">
+    <h1>TABATA 計時器</h1>
+    <p class="lead">依照組數、準備時間與每組時間自動倒數，陪你完成訓練。</p>
+    <div class="controls">
+      <div class="form-group">
+        <label for="cycles">組數 (cycle)</label>
+        <input id="cycles" class="form-control" type="number" min="1" value="8">
+        <small class="text-muted">使用滾輪快速調整組數</small>
+      </div>
+      <div class="form-group">
+        <label for="prepare">準備時間 (秒)</label>
+        <input id="prepare" class="form-control" type="number" min="0" value="3">
+        <small class="text-muted">例如：3 秒後開始</small>
+      </div>
+      <div class="form-group">
+        <label>每組時間</label>
+        <div class="time-inputs">
+          <input id="minutes" class="form-control" type="number" min="0" value="0">
+          <span class="unit">分</span>
+          <input id="seconds" class="form-control" type="number" min="1" max="59" value="20">
+          <span class="unit">秒</span>
+        </div>
+        <small class="text-muted">輸入分鐘與秒數，會以倒數方式提示</small>
+      </div>
+    </div>
+    <div class="status">
+      <div class="status-text">
+        <div class="label-text">倒數狀態</div>
+        <div id="phase">待命</div>
+      </div>
+      <div class="status-text align-right">
+        <div class="label-text">組別進度</div>
+        <div id="cycle-progress">尚未開始</div>
+      </div>
+    </div>
+    <div id="timer">00:20</div>
+    <div class="actions">
+      <button id="toggle" class="btn btn-primary btn-lg" onclick="toggle()">開始</button>
+      <button id="reset" class="btn btn-default btn-lg" onclick="resetTimer()">重設</button>
+    </div>
+    <p id="quote" class="hidden">所有的努力都不會白費，你正在往更優秀的自己邁進</p>
+  </div>
+</body>
+</html>
