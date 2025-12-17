@@ -8,6 +8,7 @@ var state = {
   prepareMs: 0,
   workMs: 0,
   onComplete: null,
+  lastBeepSecond: null,
   isRunning: false
 };
 
@@ -90,6 +91,29 @@ function clearTick() {
   }
 }
 
+var audioContext = null;
+
+function ensureAudio() {
+  if (!audioContext) {
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    audioContext = new Ctx();
+  }
+}
+
+function playDing() {
+  ensureAudio();
+  var now = audioContext.currentTime;
+  var oscillator = audioContext.createOscillator();
+  var gain = audioContext.createGain();
+  oscillator.frequency.value = 880;
+  gain.gain.setValueAtTime(0.28, now);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+  oscillator.start(now);
+  oscillator.stop(now + 0.25);
+}
+
 function pause() {
   clearTick();
   state.isRunning = false;
@@ -111,6 +135,11 @@ function startTick() {
     } else {
       state.remainingMs = left;
       drawTimer();
+      var secondsLeft = Math.ceil(state.remainingMs / 1000);
+      if (secondsLeft <= 3 && secondsLeft !== state.lastBeepSecond) {
+        state.lastBeepSecond = secondsLeft;
+        playDing();
+      }
     }
   }, 100);
 }
@@ -118,6 +147,7 @@ function startTick() {
 function startPhase(phase, duration, onComplete) {
   state.phase = phase;
   state.remainingMs = duration;
+  state.lastBeepSecond = null;
   state.onComplete = onComplete;
   updateUI();
   startTick();
@@ -158,6 +188,7 @@ function resetTimerInternal(keepConfig) {
   state.phase = 'idle';
   state.currentCycle = 0;
   state.onComplete = null;
+  state.lastBeepSecond = null;
   state.remainingMs = state.workMs > 0 ? state.workMs : 0;
   updateUI();
   $('#quote').addClass('hidden');
