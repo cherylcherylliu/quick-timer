@@ -8,6 +8,7 @@ state =
   prepare-ms: 0
   work-ms: 0
   on-complete: null
+  last-beep-second: null
   is-running: false
 
 toggle-button = ->
@@ -54,6 +55,26 @@ clear-interval = ->
     clearInterval state.timer-id
     state.timer-id := null
 
+audio-context = null
+
+ensure-audio = ->
+  if !audio-context =>
+    Ctx = window.AudioContext or window.webkitAudioContext
+    audio-context := new Ctx!
+
+play-ding = ->
+  ensure-audio!
+  now = audio-context.currentTime
+  osc = audio-context.createOscillator!
+  gain = audio-context.createGain!
+  osc.frequency.value = 880
+  gain.gain.setValueAtTime 0.28, now
+  gain.gain.exponentialRampToValueAtTime 0.0001, now + 0.22
+  osc.connect gain
+  gain.connect audio-context.destination
+  osc.start now
+  osc.stop now + 0.25
+
 pause = ->
   clear-interval!
   state.is-running := false
@@ -74,11 +95,16 @@ start-tick = ->
     else
       state.remaining-ms := left
       draw-timer!
+      seconds-left = Math.ceil(state.remaining-ms / 1000)
+      if seconds-left <= 3 and seconds-left != state.last-beep-second
+        state.last-beep-second := seconds-left
+        play-ding!
   ), 100
 
 start-phase = (phase, duration, on-complete) ->
   state.phase := phase
   state.remaining-ms := duration
+  state.last-beep-second := null
   state.on-complete := on-complete
   update-ui!
   start-tick!
@@ -109,6 +135,7 @@ reset-timer = (keep-config = false) ->
   state.phase := \idle
   state.current-cycle := 0
   state.on-complete := null
+  state.last-beep-second := null
   state.remaining-ms := if state.work-ms > 0 => state.work-ms else 0
   update-ui!
   $ \#quote .addClass \hidden

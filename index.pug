@@ -14,21 +14,33 @@ html
       p.lead 依照組數、準備時間與每組時間自動倒數，陪你完成訓練。
       .controls
         .form-group
-          label(for="cycles") 組數 (cycle)
-          input#cycles.form-control(type="number", min="1", value="8")
-          small.text-muted 使用滾輪快速調整組數
+          label(for="cycles") 組數 (sets)
+          select#cycles.form-control
+            - for (var i = 1; i <= 60; i++) {
+              option(value=i selected=i === 8)= i
+            - }
+          small.text-muted 使用下拉選單快速調整組數
         .form-group
           label(for="prepare") 準備時間 (秒)
-          input#prepare.form-control(type="number", min="0", value="3")
+          select#prepare.form-control
+            - for (var i = 0; i <= 60; i++) {
+              option(value=i selected=i === 3)= i
+            - }
           small.text-muted 例如：3 秒後開始
         .form-group
           label 每組時間
           .time-inputs
-            input#minutes.form-control(type="number", min="0", value="0")
+            select#minutes.form-control
+              - for (var i = 0; i <= 60; i++) {
+                option(value=i selected=i === 0)= i
+              - }
             span.unit 分
-            input#seconds.form-control(type="number", min="1", max="59", value="20")
+            select#seconds.form-control
+              - for (var i = 1; i <= 60; i++) {
+                option(value=i selected=i === 20)= i
+              - }
             span.unit 秒
-          small.text-muted 輸入分鐘與秒數，會以倒數方式提示
+          small.text-muted 選擇分鐘與秒數，會以倒數方式提示
       .status
         .status-text
           div.label-text 倒數狀態
@@ -40,4 +52,4 @@ html
       .actions
         button#toggle.btn.btn-primary.btn-lg(onclick="toggle()") 開始
         button#reset.btn.btn-default.btn-lg(onclick="resetTimer()") 重設
-      p#quote.hidden 所有的努力都不會白費，你正在往更優秀的自己邁進
+      p#quote.hidden 加油！你正在成為更好的自己！
